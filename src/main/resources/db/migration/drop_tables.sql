@@ -1,0 +1,7 @@
+-- excluir tabelas
+-- DROP TABLE PEDIDO_PRODUTO;
+-- DROP TABLE PEDIDO;
+-- DROP TABLE PRODUTO;
+-- DROP TABLE CLIENTE;
+-- DROP TABLE flyway_schema_history;
+--

@@ -1,0 +1,11 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://10.111.255.128:31001/soat_modulo_1
+    username: postgres
+    password: admin
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true

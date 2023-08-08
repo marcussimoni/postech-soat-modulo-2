@@ -1,0 +1,5 @@
+target/*
+infra/docker/data/**
+.idea/**
+.DS_Store
+./*.iml
