@@ -1,7 +1,7 @@
 package br.com.fiapsoat.config;
 
-import br.com.fiapsoat.core.domain.exceptions.BusinessError;
-import br.com.fiapsoat.core.domain.exceptions.BusinessException;
+import br.com.fiapsoat.presenters.exceptions.BusinessError;
+import br.com.fiapsoat.presenters.exceptions.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
