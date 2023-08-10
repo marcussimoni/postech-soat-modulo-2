@@ -9,11 +9,17 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.fiapsoat</groupId>
-	<artifactId>postech-soat-modulo-1</artifactId>
+	<artifactId>postech-soat-modulo-2</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>postech-soat-modulo-1</name>
-	<description>Modulo 1 Tech Challenge - Postech FIAP</description>
+	<packaging>pom</packaging>
+	<name>postech-soat-modulo-2</name>
+	<description>Modulo 2 Tech Challenge - Postech FIAP</description>
+	<modules>
+		<module>interface-adapters</module>
+		<module>application</module>
+		<module>enterprise-domain</module>
+		<module>drivers</module>
+	</modules>
 	<properties>
 		<java.version>17</java.version>
 		<flyway.version>9.19.1</flyway.version>
@@ -53,7 +59,7 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.hibernate</groupId>
+			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>8.0.0.Final</version>
 		</dependency>
@@ -99,15 +105,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<layers>
-						<enabled>true</enabled>
-					</layers>
-				</configuration>
-			</plugin>
 			<plugin>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>

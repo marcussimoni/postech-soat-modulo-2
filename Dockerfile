@@ -6,7 +6,7 @@ RUN mvn clean package
 
 FROM bellsoft/liberica-openjdk-alpine:17.0.7 as builder
 
-COPY --from=MAVEN ./target/*.jar /application.jar
+COPY --from=MAVEN ./drivers/target/*.jar /application.jar
 
 RUN java -Djarmode=layertools -jar application.jar extract
 

@@ -1,5 +1,5 @@
 target/*
-infra/docker/data/**
+drivers/infra/docker/data/**
 .idea/**
 .DS_Store
 ./*.iml
