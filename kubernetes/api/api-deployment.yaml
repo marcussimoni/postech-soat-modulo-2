@@ -38,10 +38,22 @@ spec:
           periodSeconds: 3
         env:
         - name: POSTGRES_PASSWORD
-          value: admin
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_PASSWORD
         - name: POSTGRES_USERNAME
-          value: postgres
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: POSTGRES_USERNAME
         - name: SPRING_PROFILES_ACTIVE
-          value: prd
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: SPRING_PROFILES_ACTIVE
         - name: POSTGRES_CONNECTION_URL
-          value: 'jdbc:postgresql://postgres:5432/soat_modulo_1?useSSL=false'
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_CONNECTION_URL
