@@ -16,9 +16,9 @@
 	<description>Modulo 2 Tech Challenge - Postech FIAP</description>
 	<modules>
 		<module>interface-adapters</module>
-		<module>application</module>
+		<module>application-domain</module>
 		<module>enterprise-domain</module>
-		<module>drivers</module>
+		<module>frameworks-drivers</module>
 	</modules>
 	<properties>
 		<java.version>17</java.version>

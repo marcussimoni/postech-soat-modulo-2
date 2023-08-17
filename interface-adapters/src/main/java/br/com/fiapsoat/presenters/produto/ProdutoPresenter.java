@@ -7,27 +7,12 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
-public class ProdutoPresenter {
+public interface ProdutoPresenter {
 
+    List<ProdutoDTO> toProdutoDTO(List<Produto> produtos);
 
-    public List<ProdutoDTO> toProdutoDTO(List<Produto> produtos) {
-        return produtos.stream().map(ProdutoDTO::new).toList();
-    }
+    ProdutoDTO toProdutoDTO(Produto produto);
 
-    public ProdutoDTO toProdutoDTO(Produto produto) {
-        return new ProdutoDTO(produto);
-    }
+    Produto fromProdutoDTO(ProdutoDTO dto);
 
-    public Produto fromProdutoDTO(ProdutoDTO dto) {
-        return Produto
-                .builder()
-                .id(dto.getId())
-                .preco(dto.getPreco())
-                .categoria(dto.getCategoria())
-                .descricao(dto.getDescricao())
-                .imagem(dto.getImagem())
-                .nome(dto.getNome())
-                .build();
-    }
 }
