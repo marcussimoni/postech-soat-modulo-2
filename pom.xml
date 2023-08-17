@@ -16,8 +16,8 @@
 	<description>Modulo 2 Tech Challenge - Postech FIAP</description>
 	<modules>
 		<module>interface-adapters</module>
-		<module>application-domain</module>
-		<module>enterprise-domain</module>
+		<module>application-business</module>
+		<module>enterprise-business</module>
 		<module>frameworks-drivers</module>
 	</modules>
 	<properties>

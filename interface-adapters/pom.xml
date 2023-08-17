@@ -20,13 +20,13 @@
     <dependencies>
         <dependency>
             <groupId>br.com.fiapsoat</groupId>
-            <artifactId>application-domain</artifactId>
+            <artifactId>application-business</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>br.com.fiapsoat</groupId>
-            <artifactId>enterprise-domain</artifactId>
+            <artifactId>enterprise-business</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
