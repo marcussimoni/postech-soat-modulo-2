@@ -4,26 +4,27 @@ Projeto do tech challenge para avaliação do módulo 2 do curso Software Archit
 
 ### Api backend
 
-Api backend contendo os endpoints que representam todo o processo. A api foi criada utilizando a linguagem Java junto com o Framework Spring boot, Domain Driven Design e Arquitetura Hexagonal. Os seguintes pré requisitos são necessários para construir e executar a aplicação:
+Api backend contendo os endpoints que representam todo o processo. A api foi criada utilizando a linguagem Java junto com o Framework Spring boot, Domain Driven Design e Clean Architecture.
+A api backend esta organizada em modulos representando as respectivas camadas do modelo do Clean Architecture:
+- framework-drivers -> Framework & Drivers;
+- interface-adapters -> Interface Adapters
+- application-business -> Applications Business Rules
+- enterprise-business -> Enterprise Business Rules
 
-- Java 17
-- Apache maven 3.8.2
-- Docker 
+### Dockerfile
 
-A primeira etapa consiste em gerar o build da api backend. Para esta etapa é necessário, a partir do diretório raiz do projeto, executar o seguinte comando maven no terminal:
-`mvn clean package`
+Comando do ***Docker*** para construir a imagem da aplicação: `docker build -t postech-soat-modulo-2 .`
 
-### Dockerfile e Docker Compose para execução da api com o banco de dados.
+### Kubernetes
 
-Com o build da api backend concluído, as etapas para construção da imagem e execução do docker compose podem ser realizadas com os seguintes comandos a partir da raiz do projeto: 
-
-- Comando do docker para construir a imagem da aplicação
-  `docker build -t postech-soat-modulo-1 .`
-- Comando do docker compose responsável por iniciar as imagens da api backend junto da imagem do postgresql, que será utilizado como banco de dados. `docker-compose -f ./docker/docker-compose.yml up`
+No diretório ***kubernetes*** encontram-se todos os arquivos necessários para iniciar a api backend junto com o banco de dados postgres. Junto dos arquivos de configuração 
+foi disponibilizado também o arquivo ***k8s-config.sh*** que auxilia a implantação/exclusão do objetos kubernetes.
+Para deploy dos arquivos executar o comando a partir da raiz do projeto:
+`sh kubernetes/k8s-config.sh apply` e para remover o arquivos de configuração executar: `sh kubernetes/k8s-config.sh delete`
 
 ## Acesso a documentação da api (Swagger)
 
-Com a api e o banco de dados iniciados, podemos acessar a documentação da api a partir do endereço ***[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)***
+Após a configuração dos arquivos do kubernetes, podemos acessar a documentação da api a partir do endereço ***[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)***
 
 ### Etapas para realizar pedido (Totem de auto atendimento)
 
