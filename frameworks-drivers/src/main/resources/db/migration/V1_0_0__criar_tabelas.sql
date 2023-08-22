@@ -32,3 +32,15 @@ CREATE TABLE pedido_produto (
     produto_id int REFERENCES produto(id),
     CONSTRAINT pedido_produto_id PRIMARY KEY (pedido_id, produto_id)
 );
+
+CREATE TABLE pagamento (
+    id serial primary key,
+    pedido_id int,
+    codigo_de_autenticacao varchar(100) not null,
+    data_do_pagamento timestamp not null,
+    data_de_confirmacao timestamp,
+    status varchar(100) not null,
+    CONSTRAINT fk_pedido
+    FOREIGN KEY(pedido_id)
+    REFERENCES pedido(id)
+);

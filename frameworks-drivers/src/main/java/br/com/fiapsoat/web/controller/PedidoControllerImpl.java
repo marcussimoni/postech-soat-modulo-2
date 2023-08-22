@@ -1,5 +1,6 @@
 package br.com.fiapsoat.web.controller;
 
+import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.presenters.dto.PedidoDTO;
 import br.com.fiapsoat.presenters.pedido.PedidoPresenter;
 import br.com.fiapsoat.usecases.pedido.PedidoUseCase;
@@ -22,10 +23,8 @@ public class PedidoControllerImpl {
 
     @GetMapping
     @Operation(tags = "Pedidos", summary = "Lista todos os pedidos disponíveis.", description = "Lista todos os pedidos nas etapas pago, recebido, em preparação ou pronto. Para produtos finalizados utilizar a busca por número do pedido.")
-    public List<PedidoDTO> listar(){
-
-        return pedidoUseCase.listar().stream().map(pedidoPresenter::pedidoDTOBuilder).toList();
-
+    public List<PedidoDTO> listar(@RequestParam(value = "status", required = false) StatusDoPagamento statusDoPagamento){
+        return pedidoUseCase.listar(statusDoPagamento).stream().map(pedidoPresenter::pedidoDTOBuilder).toList();
     }
 
     @PutMapping(path = "/proxima-etapa/{pedido}")

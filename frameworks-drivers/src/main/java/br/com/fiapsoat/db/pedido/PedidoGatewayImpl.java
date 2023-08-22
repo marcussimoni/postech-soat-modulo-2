@@ -1,12 +1,10 @@
 package br.com.fiapsoat.db.pedido;
 
+import br.com.fiapsoat.db.produto.TbProduto;
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
+import br.com.fiapsoat.entities.exceptions.BusinessException;
 import br.com.fiapsoat.entities.pedido.Pedido;
 import br.com.fiapsoat.gateways.pedido.PedidoGateway;
-import br.com.fiapsoat.db.produto.TbProduto;
-import br.com.fiapsoat.gateways.cliente.ClienteGateway;
-import br.com.fiapsoat.gateways.produto.ProdutoGateway;
-import br.com.fiapsoat.entities.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,12 +20,15 @@ import java.util.List;
 public class PedidoGatewayImpl implements PedidoGateway {
 
     private final SpringRepository repository;
-    private final ProdutoGateway produtoGateway;
-    private final ClienteGateway clienteGateway;
 
     @Override
     public List<Pedido> buscarPedidosDisponiveis(StatusDoPagamento statusDoPagamento) {
         return repository.buscarPedidosDisponiveis(statusDoPagamento).stream().map(this::pedidoBuilder).toList();
+    }
+
+    @Override
+    public List<Pedido> buscarTodosOsPedidos(){
+        return repository.findAll().stream().map(this::pedidoBuilder).toList();
     }
 
     @Override
@@ -56,7 +57,9 @@ public class PedidoGatewayImpl implements PedidoGateway {
                 p.setPedidoRetirado(pedido.getPedidoRetirado());
                 p.setEtapa(pedido.getEtapa());
                 p.setStatusDoPagamento(pedido.getStatusDoPagamento());
-                p.setCliente(pedido.getCliente().clienteBuilder());
+                if(pedido.getCliente() != null){
+                    p.setCliente(pedido.getCliente().clienteBuilder());
+                }
                 p.setProdutos(pedido.getProdutos().stream().map(TbProduto::produtoBuilder).toList());
         return p;
     }

@@ -1,8 +1,11 @@
 package br.com.fiapsoat.usecases.pagamento;
 
-import br.com.fiapsoat.entities.recibo.Recibo;
+import br.com.fiapsoat.entities.recibo.Comprovante;
 
 public interface PagamentoUseCase {
-    Recibo pagamento(Long pedido);
+    Comprovante pagamento(Long pedido);
+    void confirmacaoPagamento(Long idPagamento);
+    Comprovante buscarComprovante(Long idPagamento);
+
 
 }

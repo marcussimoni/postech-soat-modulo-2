@@ -29,4 +29,9 @@ public class PedidoServiceImpl implements PedidoService {
     public List<Pedido> buscarPedidosDisponiveis(StatusDoPagamento statusDoPagamento) {
         return pedidoGateway.buscarPedidosDisponiveis(statusDoPagamento);
     }
+
+    @Override
+    public List<Pedido> buscarTodosOsPedidosDisponiveis() {
+        return pedidoGateway.buscarTodosOsPedidos();
+    }
 }

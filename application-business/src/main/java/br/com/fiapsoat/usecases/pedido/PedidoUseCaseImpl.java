@@ -53,16 +53,22 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
 
     @Override
     @Transactional
-    public void atualizarStatusPagamentoDoPedido(Long id) {
+    public void atualizarStatusPagamentoDoPedido(Long id, StatusDoPagamento status) {
         Pedido pedido = pedidoService.findById(id);
-        pedido.setStatusDoPagamento(StatusDoPagamento.PAGO);
+        pedido.setStatusDoPagamento(status);
         pedidoService.save(pedido);
     }
 
 
     @Override
-    public List<Pedido> listar() {
-        return pedidoService.buscarPedidosDisponiveis(StatusDoPagamento.PAGO);
+    public List<Pedido> listar(StatusDoPagamento statusDoPagamento) {
+
+        if(statusDoPagamento == null) {
+            return pedidoService.buscarTodosOsPedidosDisponiveis();
+        } else {
+            return pedidoService.buscarPedidosDisponiveis(statusDoPagamento);
+        }
+
     }
 
     @Transactional

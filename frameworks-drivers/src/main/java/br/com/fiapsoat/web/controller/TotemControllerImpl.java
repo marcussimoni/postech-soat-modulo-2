@@ -5,7 +5,7 @@ import br.com.fiapsoat.entities.cliente.Cliente;
 import br.com.fiapsoat.entities.enums.Categoria;
 import br.com.fiapsoat.entities.pedido.Pedido;
 import br.com.fiapsoat.entities.produto.Produto;
-import br.com.fiapsoat.entities.recibo.Recibo;
+import br.com.fiapsoat.entities.recibo.Comprovante;
 import br.com.fiapsoat.entities.valueobjects.cpf.Cpf;
 import br.com.fiapsoat.entities.valueobjects.email.Email;
 import br.com.fiapsoat.entities.valueobjects.nome.Nome;
@@ -87,13 +87,9 @@ public class TotemControllerImpl implements TotemController {
     @Override
     @PostMapping(path = "/pedido/pagamento/{pedido}")
     @Operation(tags = "Totem de auto atendimento", summary = "Pagamento do pedido", description = "Realiza o pagamento do pedido para que o pedido possa ser encaminhado para o preparo. Caso o pagamento não seja concluído o pedido não poderá avançar para as próximas etapas.")
-    public ReciboDTO pagamento(@Parameter(name = "pedido", description = "Código do pedido gerado pelo sistema") @PathVariable(name = "pedido") Long pedido){
-        Recibo recibo = pagamentoUseCase.pagamento(pedido);
-        return ReciboDTO
-                .builder()
-                .dataHoraPagamento(recibo.getDataHoraPagamento())
-                .codigoDeAutenticacao(recibo.getCodigoDeAutenticacao())
-                .build();
+    public ComprovanteDTO pagamento(@Parameter(name = "pedido", description = "Código do pedido gerado pelo sistema") @PathVariable(name = "pedido") Long pedido){
+        Comprovante comprovante = pagamentoUseCase.pagamento(pedido);
+        return new ComprovanteDTO(comprovante);
     }
 
 }

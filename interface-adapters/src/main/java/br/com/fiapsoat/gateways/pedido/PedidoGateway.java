@@ -8,6 +8,8 @@ import java.util.List;
 public interface PedidoGateway {
     List<Pedido> buscarPedidosDisponiveis(StatusDoPagamento statusDoPagamento);
 
+    List<Pedido> buscarTodosOsPedidos();
+
     Pedido save(Pedido pedido);
 
     Pedido findById(Long pedido);

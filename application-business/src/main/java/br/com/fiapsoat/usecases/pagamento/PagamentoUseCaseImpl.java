@@ -1,29 +1,86 @@
 package br.com.fiapsoat.usecases.pagamento;
 
-import br.com.fiapsoat.entities.recibo.Recibo;
+import br.com.fiapsoat.entities.enums.StatusDoPagamento;
+import br.com.fiapsoat.entities.pagamento.Pagamento;
+import br.com.fiapsoat.entities.produto.Produto;
+import br.com.fiapsoat.entities.recibo.Comprovante;
+import br.com.fiapsoat.services.pagamento.PagamentoService;
 import br.com.fiapsoat.usecases.pedido.PedidoUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
+import java.math.BigDecimal;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static br.com.fiapsoat.entities.enums.StatusDoPagamento.AGUARDANDO_CONFIRMACAO;
 
 @Service
 @AllArgsConstructor
 public class PagamentoUseCaseImpl implements PagamentoUseCase {
 
     private PedidoUseCase pedidoUseCase;
+    private PagamentoService pagamentoService;
 
     @Override
-    public Recibo pagamento(Long pedido) {
+    public Comprovante pagamento(Long pedido) {
 
-        pedidoUseCase.atualizarStatusPagamentoDoPedido(pedido);
+        Pagamento pagamento = new Pagamento(pedidoUseCase.buscarPedidoPorId(pedido));
 
-        return Recibo
+        Pagamento pagamentoRegistrado = pagamentoService.registrarPagamento(pagamento);
+
+        pedidoUseCase.atualizarStatusPagamentoDoPedido(pedido, AGUARDANDO_CONFIRMACAO);
+
+        return comprovanteBuilder(pagamentoRegistrado);
+    }
+
+    @Override
+    public void confirmacaoPagamento(Long idPagamento) {
+
+        Pagamento pagamento = pagamentoService.buscarPagamentoPorId(idPagamento);
+
+        pagamentoService.atualizarStatusPagamento(pagamento, StatusDoPagamento.PAGO);
+
+        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamento.getPedido().getId(), StatusDoPagamento.PAGO);
+
+    }
+
+    @Override
+    public Comprovante buscarComprovante(Long idPagamento) {
+        return comprovanteBuilder(pagamentoService.buscarPagamentoPorId(idPagamento));
+    }
+
+    private String calcularValorTotalDoPedido(Pagamento pagamentoRegistrado) {
+        Double total = pagamentoRegistrado.getPedido().getProdutos().stream().map(Produto::getPreco).reduce(0.0, Double::sum);
+        return MessageFormat.format("R$ {0}", BigDecimal.valueOf(total).setScale(2));
+    }
+
+    private List<String> itensPedido(Pagamento pagamento) {
+        return pagamento.getPedido().getProdutos().stream().map(produto -> {
+            return MessageFormat.format("Item: {0} valor: R$ {1}", produto.getNome(), BigDecimal.valueOf(produto.getPreco()).setScale(2));
+        }).collect(Collectors.toList());
+    }
+
+    private Comprovante comprovanteBuilder(Pagamento pagamentoRegistrado) {
+
+        String totalDoPedido = calcularValorTotalDoPedido(pagamentoRegistrado);
+        String nomeDoCliente = "Cliente não identificado";
+
+        if(pagamentoRegistrado.getPedido().getCliente() != null) {
+            nomeDoCliente = pagamentoRegistrado.getPedido().getCliente().getNome().getValue();
+        }
+
+        return Comprovante
                 .builder()
-                .dataHoraPagamento(LocalDateTime.now())
-                .codigoDeAutenticacao(UUID.randomUUID().toString())
-                .codigoDoPedido(pedido)
+                .idDoPagamento(pagamentoRegistrado.getId())
+                .idDoPedido(pagamentoRegistrado.getPedido().getId())
+                .dataHoraPagamento(pagamentoRegistrado.getDataDoPagamento())
+                .codigoDeAutenticacao(pagamentoRegistrado.getCodigoDeAutenticacao())
+                .codigoDoPedido(pagamentoRegistrado.getId())
+                .itensPedido(itensPedido(pagamentoRegistrado))
+                .valorTotal(totalDoPedido)
+                .nomeDoCliente(nomeDoCliente)
                 .build();
     }
 

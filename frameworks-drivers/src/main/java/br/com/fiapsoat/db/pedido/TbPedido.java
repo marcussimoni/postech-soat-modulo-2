@@ -31,7 +31,9 @@ public class TbPedido implements Serializable {
 
     public TbPedido(Pedido pedido){
         this.id = pedido.getId();
-        this.cliente = new TbCliente(pedido.getCliente());
+        if(pedido.getCliente() != null){
+            this.cliente = new TbCliente(pedido.getCliente());
+        }
         this.etapa = pedido.getEtapa();
         this.statusDoPagamento = pedido.getStatusDoPagamento();
         this.pedidoRealizadoEm = pedido.getPedidoRealizadoEm();
@@ -74,6 +76,20 @@ public class TbPedido implements Serializable {
         if(etapa == EtapaDoPedido.FINALIZADO && pedidoRetirado == null){
             this.pedidoRetirado = LocalDateTime.now();
         }
+    }
+
+    public Pedido pedidoBuilder(){
+        Pedido pedido = new Pedido();
+        pedido.setId(this.getId());
+        if(this.getCliente() != null){
+            pedido.setCliente(this.getCliente().clienteBuilder());
+        }
+        pedido.setPedidoRealizadoEm(this.getPedidoRealizadoEm());
+        pedido.setPedidoRetirado(this.getPedidoRetirado());
+        pedido.setEtapa(this.getEtapa());
+        pedido.setProdutos(this.getProdutos().stream().map(TbProduto::produtoBuilder).toList());
+        pedido.setStatusDoPagamento(this.getStatusDoPagamento());
+        return pedido;
     }
 
 }

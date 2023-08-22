@@ -11,4 +11,5 @@ public interface PedidoService {
     Pedido save(Pedido pedido);
 
     List<Pedido> buscarPedidosDisponiveis(StatusDoPagamento statusDoPagamento);
+    List<Pedido> buscarTodosOsPedidosDisponiveis();
 }

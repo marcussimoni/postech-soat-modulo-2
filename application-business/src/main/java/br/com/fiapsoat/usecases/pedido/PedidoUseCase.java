@@ -1,5 +1,6 @@
 package br.com.fiapsoat.usecases.pedido;
 
+import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.pedido.Pedido;
 import br.com.fiapsoat.entities.produto.Produto;
 import br.com.fiapsoat.entities.valueobjects.cpf.Cpf;
@@ -11,9 +12,9 @@ public interface PedidoUseCase {
 
     Pedido checkoutPedido(Cpf cpf, List<Produto> produtos);
 
-    void atualizarStatusPagamentoDoPedido(Long pedido);
+    void atualizarStatusPagamentoDoPedido(Long pedido, StatusDoPagamento status);
 
-    List<Pedido> listar();
+    List<Pedido> listar(StatusDoPagamento statusDoPagamento);
 
     Pedido atualizaParaAProximaEtapaDoPedido(Long pedido);
 }

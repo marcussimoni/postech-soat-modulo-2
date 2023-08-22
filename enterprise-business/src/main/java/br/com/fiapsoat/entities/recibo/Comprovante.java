@@ -4,11 +4,17 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Getter
 @Builder
-public class Recibo {
+public class Comprovante {
+    private long idDoPagamento;
+    private long idDoPedido;
     private String codigoDeAutenticacao;
     private Long codigoDoPedido;
-
     private LocalDateTime dataHoraPagamento;
+    private List<String> itensPedido;
+    private String valorTotal;
+    private String nomeDoCliente;
 }
