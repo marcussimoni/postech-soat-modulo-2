@@ -15,6 +15,4 @@ public interface TotemController {
 
     PedidoDTO checkout(CheckoutPedidoDTO dto);
 
-    ComprovanteDTO pagamento(Long pedido);
-
 }

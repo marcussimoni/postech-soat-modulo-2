@@ -6,7 +6,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import java.util.Arrays;
 
 public enum StatusDoPagamento {
-    AGUARDANDO_PAGAMENTO("Aguardando pagamento"), AGUARDANDO_CONFIRMACAO("Aguardando confirmação do pagamento pela instituição financeira"), PAGO("Pagamento confirmado");
+    AGUARDANDO_PAGAMENTO("Aguardando pagamento"),
+    AGUARDANDO_CONFIRMACAO("Aguardando confirmação do pagamento pela instituição financeira"),
+    PAGO("Pagamento confirmado"),
+    PAGAMENTO_RECUSADO("Pagamento recusado pela instituição financeira")
+    ;
 
     private final String status;
 

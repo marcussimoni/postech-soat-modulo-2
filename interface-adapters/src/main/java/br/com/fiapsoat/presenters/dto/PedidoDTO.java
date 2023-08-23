@@ -26,7 +26,7 @@ public class PedidoDTO {
     private EtapaDoPedido etapa;
 
     @Schema(description = "Status do pagamento do pedido", example = "Pago")
-    private StatusDoPagamento statusDoPagamento;
+    private String statusDoPagamento;
 
     @Schema(description = "Data e hora em que o pedido foi realizado", example = "2023-01-01T00:00:00")
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")

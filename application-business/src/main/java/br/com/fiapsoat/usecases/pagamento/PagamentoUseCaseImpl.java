@@ -1,7 +1,9 @@
 package br.com.fiapsoat.usecases.pagamento;
 
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
+import br.com.fiapsoat.entities.pagamento.ConfirmacaoPagamento;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
+import br.com.fiapsoat.entities.pagamento.PagamentoPedido;
 import br.com.fiapsoat.entities.produto.Produto;
 import br.com.fiapsoat.entities.recibo.Comprovante;
 import br.com.fiapsoat.services.pagamento.PagamentoService;
@@ -24,31 +26,37 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
     private PagamentoService pagamentoService;
 
     @Override
-    public Comprovante pagamento(Long pedido) {
+    public Comprovante pagamento(PagamentoPedido pagamentoPedido) {
 
-        Pagamento pagamento = new Pagamento(pedidoUseCase.buscarPedidoPorId(pedido));
+        Pagamento pagamento = new Pagamento(pedidoUseCase.buscarPedidoPorId(pagamentoPedido.getIdDoPedido()));
 
         Pagamento pagamentoRegistrado = pagamentoService.registrarPagamento(pagamento);
 
-        pedidoUseCase.atualizarStatusPagamentoDoPedido(pedido, AGUARDANDO_CONFIRMACAO);
+        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamentoPedido.getIdDoPedido(), AGUARDANDO_CONFIRMACAO);
 
         return comprovanteBuilder(pagamentoRegistrado);
+
     }
 
     @Override
-    public void confirmacaoPagamento(Long idPagamento) {
+    public void confirmacaoPagamento(ConfirmacaoPagamento confirmacaoPagamento) {
 
-        Pagamento pagamento = pagamentoService.buscarPagamentoPorId(idPagamento);
+        Pagamento pagamento = pagamentoService.buscarPagamentoPorId(confirmacaoPagamento.getIdPagamento());
 
-        pagamentoService.atualizarStatusPagamento(pagamento, StatusDoPagamento.PAGO);
+        pagamentoService.atualizarStatusPagamento(pagamento, confirmacaoPagamento.getStatusDoPagamento());
 
-        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamento.getPedido().getId(), StatusDoPagamento.PAGO);
+        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamento.getPedido().getId(), confirmacaoPagamento.getStatusDoPagamento());
 
     }
 
     @Override
     public Comprovante buscarComprovante(Long idPagamento) {
         return comprovanteBuilder(pagamentoService.buscarPagamentoPorId(idPagamento));
+    }
+
+    @Override
+    public Pagamento buscarPagamento(Long idPagamento) {
+        return pagamentoService.buscarPagamentoPorId(idPagamento);
     }
 
     private String calcularValorTotalDoPedido(Pagamento pagamentoRegistrado) {

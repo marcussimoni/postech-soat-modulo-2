@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/soat_modulo_1
+    url: jdbc:postgresql://localhost:5432/soat_modulo_2
     username: postgres
     password: admin
   jpa:

@@ -38,7 +38,6 @@ public class TotemControllerImpl implements TotemController {
     private final ProdutoPresenter produtoPresenter;
     private final PedidoUseCase pedidoUseCase;
     private final PedidoPresenter pedidoPresenter;
-    private final PagamentoUseCase pagamentoUseCase;
 
     @Override
     @GetMapping(path = "/cliente/buscar")
@@ -82,14 +81,6 @@ public class TotemControllerImpl implements TotemController {
         List<Produto> produtos = dto.getProdutos().stream().map(produtoPresenter::fromProdutoDTO).toList();
         Pedido pedido = pedidoUseCase.checkoutPedido(new Cpf(dto.getCpf()), produtos);
         return pedidoPresenter.pedidoDTOBuilder(pedido);
-    }
-
-    @Override
-    @PostMapping(path = "/pedido/pagamento/{pedido}")
-    @Operation(tags = "Totem de auto atendimento", summary = "Pagamento do pedido", description = "Realiza o pagamento do pedido para que o pedido possa ser encaminhado para o preparo. Caso o pagamento não seja concluído o pedido não poderá avançar para as próximas etapas.")
-    public ComprovanteDTO pagamento(@Parameter(name = "pedido", description = "Código do pedido gerado pelo sistema") @PathVariable(name = "pedido") Long pedido){
-        Comprovante comprovante = pagamentoUseCase.pagamento(pedido);
-        return new ComprovanteDTO(comprovante);
     }
 
 }
