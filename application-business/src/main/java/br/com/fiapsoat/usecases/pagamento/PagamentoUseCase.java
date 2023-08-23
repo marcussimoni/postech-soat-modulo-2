@@ -8,7 +8,7 @@ import br.com.fiapsoat.entities.recibo.Comprovante;
 public interface PagamentoUseCase {
     Comprovante pagamento(PagamentoPedido pagamentoPedido);
     void confirmacaoPagamento(ConfirmacaoPagamento confirmacaoPagamento);
-    Comprovante buscarComprovante(Long idPagamento);
+    Comprovante buscarComprovante(Long numeroDoPedido);
 
-    Pagamento buscarPagamento(Long idPagamento);
+    Pagamento buscarPagamentoPorNumeroDoPedido(Long numeroDoPedido);
 }

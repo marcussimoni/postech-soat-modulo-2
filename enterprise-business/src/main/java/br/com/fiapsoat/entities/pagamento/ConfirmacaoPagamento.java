@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ConfirmacaoPagamento {
 
-    private Long idPagamento;
+    private Long numeroDoPedido;
     private StatusDoPagamento statusDoPagamento;
 
 }

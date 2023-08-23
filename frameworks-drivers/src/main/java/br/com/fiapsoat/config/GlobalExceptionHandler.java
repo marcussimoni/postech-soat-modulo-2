@@ -2,6 +2,7 @@ package br.com.fiapsoat.config;
 
 import br.com.fiapsoat.entities.exceptions.BusinessError;
 import br.com.fiapsoat.entities.exceptions.BusinessException;
+import br.com.fiapsoat.entities.exceptions.ClientNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,19 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = BusinessException.class)
     public ResponseEntity<BusinessError> businessException(BusinessException exception, WebRequest request) {
+        BusinessError error = BusinessError
+                .builder()
+                .erro(exception.getErro())
+                .detalhes(exception.getDetalhes())
+                .timestamp(LocalDateTime.now())
+                .build();
+        logger.error(error.getErro(), exception);
+        return ResponseEntity.status(exception.getStatusCode()).body(error);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(value = ClientNotFoundException.class)
+    public ResponseEntity<BusinessError> clientNotFoundException(ClientNotFoundException exception, WebRequest request) {
         BusinessError error = BusinessError
                 .builder()
                 .erro(exception.getErro())

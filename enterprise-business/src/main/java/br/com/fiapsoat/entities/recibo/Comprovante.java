@@ -10,7 +10,7 @@ import java.util.List;
 @Builder
 public class Comprovante {
     private long idDoPagamento;
-    private long idDoPedido;
+    private long numeroDoPedido;
     private String codigoDeAutenticacao;
     private Long codigoDoPedido;
     private LocalDateTime dataHoraPagamento;

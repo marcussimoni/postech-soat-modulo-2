@@ -38,8 +38,8 @@ public class PagamentoControllerImpl implements PagamentoController {
     @Override
     @GetMapping(path = "/{id}")
     @Operation(tags = "Área administrativa - Pagamentos", summary = "Consultar status do pagamento", description = "Consulta status do pagamento para os pedidos realizados")
-    public PagamentoDTO consultarStatusDoPagamento(Long idPagamento) {
-        Pagamento pagamento = pagamentoUserCase.buscarPagamento(idPagamento);
+    public PagamentoDTO consultarStatusDoPagamento(@Parameter(name = "id", description = "Número do pedido") @PathVariable("id") Long numeroDoPedido) {
+        Pagamento pagamento = pagamentoUserCase.buscarPagamentoPorNumeroDoPedido(numeroDoPedido);
         return pagamentoPresenter.toPagamentoDTO(pagamento);
     }
 
@@ -47,8 +47,8 @@ public class PagamentoControllerImpl implements PagamentoController {
     @GetMapping(path = "/{id}/comprovante")
     @ResponseStatus(HttpStatus.OK)
     @Operation(tags = "Área administrativa - Pagamentos", summary = "Comprovante", description = "Comprovante da confirmação de pagamento do pedido")
-    public ComprovanteDTO buscarComprovante(@Parameter(description = "Id do pagamento", name = "id") @PathVariable("id") Long idPagamento) {
-        return pagamentoPresenter.toComprovanteDTO(pagamentoUserCase.buscarComprovante(idPagamento));
+    public ComprovanteDTO buscarComprovante(@Parameter(description = "Número do pedido", name = "id") @PathVariable("id") Long numeroDoPedido) {
+        return pagamentoPresenter.toComprovanteDTO(pagamentoUserCase.buscarComprovante(numeroDoPedido));
     }
 
     @Override

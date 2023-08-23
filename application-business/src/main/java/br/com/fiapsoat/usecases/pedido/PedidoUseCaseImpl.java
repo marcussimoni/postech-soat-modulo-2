@@ -84,7 +84,7 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
 
         entity.setEtapa(entity.getEtapa().proximaEtapa());
 
-        return entity;
+        return pedidoService.save(entity);
 
     }
 

@@ -9,4 +9,6 @@ public interface PagamentoGateway {
     Pagamento buscarPagamentoPorId(Long idPagamento);
 
     void atualizarStatusPagamento(Pagamento pagamento, StatusDoPagamento statusDoPagamento);
+
+    Pagamento buscarPagamentoPorNumeroDoPedido(Long numeroDoPedido);
 }

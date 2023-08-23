@@ -8,5 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PagamentoPedido {
-    private Long idDoPedido;
+
+    private Long numeroDoPedido;
+
 }

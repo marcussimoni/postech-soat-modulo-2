@@ -1,12 +1,13 @@
 package br.com.fiapsoat.db.pagamento;
 
 
-import br.com.fiapsoat.db.cliente.TbCliente;
 import br.com.fiapsoat.db.pedido.TbPedido;
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.exceptions.BusinessException;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
+import br.com.fiapsoat.entities.pedido.Pedido;
 import br.com.fiapsoat.gateways.pagamento.PagamentoGateway;
+import br.com.fiapsoat.gateways.pedido.PedidoGateway;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.data.repository.CrudRepository;
@@ -26,6 +27,7 @@ import static br.com.fiapsoat.entities.enums.StatusDoPagamento.AGUARDANDO_CONFIR
 public class PagamentoGatewayImpl implements PagamentoGateway {
 
     private final SpringRepository repository;
+    private final PedidoGateway pedidoGateway;
 
     @Override
     @Transactional
@@ -74,9 +76,23 @@ public class PagamentoGatewayImpl implements PagamentoGateway {
         if(optional.isPresent()){
             TbPagamento entity = optional.get();
             entity.setStatus(statusDoPagamento);
+            entity.setDataDeConfirmacao(LocalDateTime.now());
             repository.save(entity);
         }
 
+    }
+
+    @Override
+    public Pagamento buscarPagamentoPorNumeroDoPedido(Long numeroDoPedido) {
+
+        Pedido pedido = pedidoGateway.findById(numeroDoPedido);
+
+        Optional<TbPagamento> pagamento = repository.findByPedido(new TbPedido(pedido));
+        if(pagamento.isEmpty()){
+            String msg = MessageFormat.format("Pagamento não encontrado para o número de pedido {0}", numeroDoPedido);
+            throw new BusinessException(msg, List.of(), HttpStatus.BAD_REQUEST);
+        }
+        return pagamento.get().pagamentoBuilder();
     }
 
     @Repository

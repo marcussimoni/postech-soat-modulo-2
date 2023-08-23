@@ -25,7 +25,7 @@ public class ClienteGatewayImpl implements ClienteGateway {
     public Cliente findByCpf(Cpf cpf) {
 
         TbCliente cliente = repository.findByCpf(cpf.getValue()).orElseThrow(() -> {
-            throw new ClientNotFoundException("Cliente já cadastrado", List.of(MessageFormat.format("Já existe um cliente cadastrado para o cpf {0}", cpf.getValue())), HttpStatus.BAD_REQUEST);
+            throw new ClientNotFoundException("Cliente não encontrado", List.of(MessageFormat.format("Cliente não encontrado para o cpf {0}", cpf.format())), HttpStatus.BAD_REQUEST);
         });
 
         return cliente.clienteBuilder();

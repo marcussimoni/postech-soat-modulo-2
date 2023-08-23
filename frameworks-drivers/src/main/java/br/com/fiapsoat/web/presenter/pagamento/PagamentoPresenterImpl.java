@@ -15,7 +15,7 @@ public class PagamentoPresenterImpl implements PagamentoPresenter {
         PagamentoDTO dto = new PagamentoDTO();
 
         dto.setId(pagamento.getId());
-        dto.setCodigoDoPedido(pagamento.getPedido().getId());
+        dto.setNumeroDoPedido(pagamento.getPedido().getId());
         dto.setDataDoPagamento(pagamento.getDataDoPagamento());
         dto.setDataDeConfirmacao(pagamento.getDataDeConfirmacao());
         dto.setStatus(pagamento.getStatus().getStatus());
@@ -28,7 +28,7 @@ public class PagamentoPresenterImpl implements PagamentoPresenter {
     public ComprovanteDTO toComprovanteDTO(Comprovante comprovante) {
         ComprovanteDTO dto = new ComprovanteDTO();
         dto.setCodigoDoPagamento(comprovante.getIdDoPagamento());
-        dto.setCodigoDoPedido(comprovante.getIdDoPedido());
+        dto.setNumeroDoPedido(comprovante.getNumeroDoPedido());
         dto.setDataHoraPagamento(comprovante.getDataHoraPagamento());
         dto.setItensPedido(comprovante.getItensPedido());
         dto.setValorTotal(comprovante.getValorTotal());

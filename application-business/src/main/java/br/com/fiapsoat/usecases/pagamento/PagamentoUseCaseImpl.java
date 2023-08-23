@@ -1,6 +1,5 @@
 package br.com.fiapsoat.usecases.pagamento;
 
-import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.pagamento.ConfirmacaoPagamento;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
 import br.com.fiapsoat.entities.pagamento.PagamentoPedido;
@@ -28,11 +27,11 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
     @Override
     public Comprovante pagamento(PagamentoPedido pagamentoPedido) {
 
-        Pagamento pagamento = new Pagamento(pedidoUseCase.buscarPedidoPorId(pagamentoPedido.getIdDoPedido()));
+        Pagamento pagamento = new Pagamento(pedidoUseCase.buscarPedidoPorId(pagamentoPedido.getNumeroDoPedido()));
 
         Pagamento pagamentoRegistrado = pagamentoService.registrarPagamento(pagamento);
 
-        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamentoPedido.getIdDoPedido(), AGUARDANDO_CONFIRMACAO);
+        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamentoPedido.getNumeroDoPedido(), AGUARDANDO_CONFIRMACAO);
 
         return comprovanteBuilder(pagamentoRegistrado);
 
@@ -41,7 +40,7 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
     @Override
     public void confirmacaoPagamento(ConfirmacaoPagamento confirmacaoPagamento) {
 
-        Pagamento pagamento = pagamentoService.buscarPagamentoPorId(confirmacaoPagamento.getIdPagamento());
+        Pagamento pagamento = pagamentoService.buscarPagamentoPorNumeroDoPedido(confirmacaoPagamento.getNumeroDoPedido());
 
         pagamentoService.atualizarStatusPagamento(pagamento, confirmacaoPagamento.getStatusDoPagamento());
 
@@ -50,13 +49,13 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
     }
 
     @Override
-    public Comprovante buscarComprovante(Long idPagamento) {
-        return comprovanteBuilder(pagamentoService.buscarPagamentoPorId(idPagamento));
+    public Comprovante buscarComprovante(Long numeroDoPedido) {
+        return comprovanteBuilder(pagamentoService.buscarPagamentoPorNumeroDoPedido(numeroDoPedido));
     }
 
     @Override
-    public Pagamento buscarPagamento(Long idPagamento) {
-        return pagamentoService.buscarPagamentoPorId(idPagamento);
+    public Pagamento buscarPagamentoPorNumeroDoPedido(Long numeroDoPedido) {
+        return pagamentoService.buscarPagamentoPorNumeroDoPedido(numeroDoPedido);
     }
 
     private String calcularValorTotalDoPedido(Pagamento pagamentoRegistrado) {
@@ -82,7 +81,7 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
         return Comprovante
                 .builder()
                 .idDoPagamento(pagamentoRegistrado.getId())
-                .idDoPedido(pagamentoRegistrado.getPedido().getId())
+                .numeroDoPedido(pagamentoRegistrado.getPedido().getId())
                 .dataHoraPagamento(pagamentoRegistrado.getDataDoPagamento())
                 .codigoDeAutenticacao(pagamentoRegistrado.getCodigoDeAutenticacao())
                 .codigoDoPedido(pagamentoRegistrado.getId())

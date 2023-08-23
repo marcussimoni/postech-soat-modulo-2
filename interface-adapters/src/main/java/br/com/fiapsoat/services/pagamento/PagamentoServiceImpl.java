@@ -27,4 +27,9 @@ public class PagamentoServiceImpl implements PagamentoService {
         pagamentoGateway.atualizarStatusPagamento(pagamento, statusDoPagamento);
     }
 
+    @Override
+    public Pagamento buscarPagamentoPorNumeroDoPedido(Long numeroDoPedido) {
+        return pagamentoGateway.buscarPagamentoPorNumeroDoPedido(numeroDoPedido);
+    }
+
 }

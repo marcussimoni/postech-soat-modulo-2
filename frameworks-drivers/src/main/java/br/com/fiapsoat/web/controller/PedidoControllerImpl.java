@@ -27,10 +27,10 @@ public class PedidoControllerImpl {
         return pedidoUseCase.listar(statusDoPagamento).stream().map(pedidoPresenter::pedidoDTOBuilder).toList();
     }
 
-    @PutMapping(path = "/proxima-etapa/{pedido}")
+    @PutMapping(path = "/proxima-etapa/{numeroDoPedido}")
     @Operation(tags = "Pedidos", summary = "Atualiza etapa do pedido para próxima etapa disponível", description = "As etapas são atualizadas somente após o pagamento confirmado. As etapas são atualizadas seguindo a ordem: RECEBIDO para EM PREPARACAO para PRONTO e FINALIZADO")
-    public PedidoDTO atualizaParaEmPreparacao(@PathVariable Long pedido){
-        return pedidoPresenter.pedidoDTOBuilder(pedidoUseCase.atualizaParaAProximaEtapaDoPedido(pedido));
+    public PedidoDTO atualizaParaEmPreparacao(@PathVariable("numeroDoPedido") Long numeroDoPedido){
+        return pedidoPresenter.pedidoDTOBuilder(pedidoUseCase.atualizaParaAProximaEtapaDoPedido(numeroDoPedido));
     }
 
     @GetMapping(path = "/buscar-por-numero")

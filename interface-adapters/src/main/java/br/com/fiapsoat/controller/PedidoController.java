@@ -8,8 +8,8 @@ public interface PedidoController {
 
     List<PedidoDTO> listar();
 
-    PedidoDTO atualizaParaEmPreparacao(Long pedido);
+    PedidoDTO atualizaParaEmPreparacao(Long numeroDoPedido);
 
-    PedidoDTO buscarPedidoPorId(Long id);
+    PedidoDTO buscarPedidoPorNumero(Long numeroDoPedido);
 
 }
