@@ -11,14 +11,16 @@ A api backend esta organizada em modulos representando as respectivas camadas do
 - application-business -> Applications Business Rules
 - enterprise-business -> Enterprise Business Rules
 
-## Dockerfile
-
-Comando do ***Docker*** para construir a imagem da aplicação: `docker build -t postech-soat-modulo-2 .`
-
 ## Kubernetes
 
-No diretório ***kubernetes*** encontram-se todos os arquivos necessários para iniciar a api backend junto com o banco de dados postgres. Junto dos arquivos de configuração 
-foi disponibilizado também o arquivo ***k8s-config.sh*** que auxilia a implantação/exclusão do objetos kubernetes.
+No diretório ***kubernetes*** encontram-se todos os arquivos necessários para iniciar a api backend junto com o banco de dados postgres.
+Os arquivos devem ser executados na seguinte ordem:
+
+1. secrets
+2. postgres
+3. api
+
+Junto dos arquivos de configuração foi disponibilizado também o arquivo ***k8s-config.sh*** que auxilia a implantação/exclusão do objetos kubernetes.
 Para deploy dos arquivos executar o comando a partir da raiz do projeto:
 `sh kubernetes/k8s-config.sh apply` e para remover o arquivos de configuração executar: `sh kubernetes/k8s-config.sh delete`
 

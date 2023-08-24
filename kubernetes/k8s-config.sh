@@ -5,7 +5,6 @@ VALID_PARAM=0
 if [ "$1" = "apply" ]
 then
   VALID_PARAM=1
-  DIRECTORIES+=("configMap")
   DIRECTORIES+=("secrets")
   DIRECTORIES+=("postgres")
   DIRECTORIES+=("api")
@@ -17,7 +16,6 @@ then
   DIRECTORIES+=("api")
   DIRECTORIES+=("postgres")
   DIRECTORIES+=("secrets")
-  DIRECTORIES+=("configMap")
 fi
 
 if [ $VALID_PARAM -eq 1 ]

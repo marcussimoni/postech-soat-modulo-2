@@ -39,20 +39,20 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-secrets
               key: POSTGRES_PASSWORD
         - name: POSTGRES_USERNAME
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-secrets
               key: POSTGRES_USERNAME
         - name: SPRING_PROFILES_ACTIVE
           valueFrom:
-            configMapKeyRef:
-              name: postgres-config
+            secretKeyRef:
+              name: api-secrets
               key: SPRING_PROFILES_ACTIVE
         - name: POSTGRES_CONNECTION_URL
           valueFrom:
-            configMapKeyRef:
-              name: postgres-config
+            secretKeyRef:
+              name: api-secrets
               key: POSTGRES_CONNECTION_URL
