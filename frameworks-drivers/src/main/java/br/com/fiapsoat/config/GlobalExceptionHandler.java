@@ -64,11 +64,12 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(value = {Exception.class, RuntimeException.class})
     public ResponseEntity<BusinessError> exception(Exception exception, WebRequest request) {
         BusinessError error = BusinessError
                 .builder()
-                .erro(exception.getMessage())
+                .erro("Não foi possível processar a requisição")
+                .detalhes(List.of(exception.getMessage()))
                 .timestamp(LocalDateTime.now())
                 .build();
         logger.error(error.getErro(), exception);

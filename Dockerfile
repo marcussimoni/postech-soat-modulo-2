@@ -1,6 +1,10 @@
 FROM maven:3.8.3-openjdk-17 as MAVEN
 
-COPY . .
+COPY ./application-business ./application-business
+COPY ./enterprise-business ./enterprise-business
+COPY ./frameworks-drivers ./frameworks-drivers
+COPY ./interface-adapters ./interface-adapters
+COPY ./pom.xml ./pom.xml
 
 RUN mvn clean package
 

@@ -1,5 +1,7 @@
 package br.com.fiapsoat.usecases.pagamento;
 
+import br.com.fiapsoat.entities.enums.StatusDoPagamento;
+import br.com.fiapsoat.entities.exceptions.BusinessException;
 import br.com.fiapsoat.entities.pagamento.ConfirmacaoPagamento;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
 import br.com.fiapsoat.entities.pagamento.PagamentoPedido;
@@ -8,6 +10,7 @@ import br.com.fiapsoat.entities.recibo.Comprovante;
 import br.com.fiapsoat.services.pagamento.PagamentoService;
 import br.com.fiapsoat.usecases.pedido.PedidoUseCase;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -40,11 +43,25 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
     @Override
     public void confirmacaoPagamento(ConfirmacaoPagamento confirmacaoPagamento) {
 
+        List<StatusDoPagamento> statusDePagamentoValido = List.of(StatusDoPagamento.CONFIRMADO, StatusDoPagamento.RECUSADO);
+
+        StatusDoPagamento statusDoPagamento = confirmacaoPagamento.getStatusDoPagamento();
+
+        if(statusDoPagamento == null || !statusDePagamentoValido.contains(statusDoPagamento)){
+            String message = MessageFormat.format("Status {0} é inválido. Utilizar as opções 'CONFIRMADO' ou 'RECUSADO'.", statusDoPagamento);
+            throw new BusinessException(message, List.of(), HttpStatus.BAD_REQUEST);
+        }
+
         Pagamento pagamento = pagamentoService.buscarPagamentoPorNumeroDoPedido(confirmacaoPagamento.getNumeroDoPedido());
 
-        pagamentoService.atualizarStatusPagamento(pagamento, confirmacaoPagamento.getStatusDoPagamento());
+        if(statusDePagamentoValido.contains(pagamento.getStatus())){
+            String message = MessageFormat.format("Pagamento já realizado para o pedido {0}. Status do pagamento: {1} [{2}]", confirmacaoPagamento.getNumeroDoPedido(), pagamento.getStatus().getStatus(), pagamento.getStatus());
+            throw new BusinessException(message, List.of(), HttpStatus.BAD_REQUEST);
+        }
 
-        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamento.getPedido().getId(), confirmacaoPagamento.getStatusDoPagamento());
+        pagamentoService.atualizarStatusPagamento(pagamento, statusDoPagamento);
+
+        pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamento.getPedido().getId(), statusDoPagamento);
 
     }
 

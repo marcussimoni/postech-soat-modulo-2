@@ -1,7 +1,6 @@
 package br.com.fiapsoat.presenters.dto;
 
 import br.com.fiapsoat.entities.enums.EtapaDoPedido;
-import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +22,7 @@ public class PedidoDTO {
     private String cliente;
 
     @Schema(description = "Etapa em que o pedido se encontra", example = "Em preparação")
-    private EtapaDoPedido etapa;
+    private EtapaDoPedido etapaDaPreparacao;
 
     @Schema(description = "Status do pagamento do pedido", example = "Pago")
     private String statusDoPagamento;

@@ -27,7 +27,7 @@ public class PedidoPresenterImpl implements PedidoPresenter {
                 .numeroDoPedido(pedido.getId())
                 .pedidoRealizadoEm(pedido.getPedidoRealizadoEm())
                 .pedidoRetiradoEm(pedido.getPedidoRetirado())
-                .etapa(pedido.getEtapa())
+                .etapaDaPreparacao(pedido.getEtapa())
                 .statusDoPagamento(pedido.getStatusDoPagamento().getStatus())
                 .tempoDesdeRecebimentoDoPedido(MessageFormat.format("{0} minutos", tempoDesdeORecebimentoDoPedido))
                 .cliente(pedido.getCliente() == null ? "Cliente não identificado" : pedido.getCliente().getNome().getValue())

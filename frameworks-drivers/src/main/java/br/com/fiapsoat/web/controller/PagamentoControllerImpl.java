@@ -3,11 +3,8 @@ package br.com.fiapsoat.web.controller;
 import br.com.fiapsoat.controller.PagamentoController;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
 import br.com.fiapsoat.entities.recibo.Comprovante;
+import br.com.fiapsoat.presenters.dto.*;
 import br.com.fiapsoat.presenters.pagamento.PagamentoPresenter;
-import br.com.fiapsoat.presenters.dto.ComprovanteDTO;
-import br.com.fiapsoat.presenters.dto.ConfirmacaoPagamentoDTO;
-import br.com.fiapsoat.presenters.dto.PagamentoDTO;
-import br.com.fiapsoat.presenters.dto.PagamentoPedidoDTO;
 import br.com.fiapsoat.usecases.pagamento.PagamentoUseCase;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("pagamento")
-@Tag(name = "Área administrativa - Pagamentos", description = "Gerencia os pagamentos para os pedidos realizados")
+@Tag(name = "Pagamentos", description = "Gerencia os pagamentos para os pedidos realizados")
 public class PagamentoControllerImpl implements PagamentoController {
 
     private final PagamentoUseCase pagamentoUserCase;
@@ -28,32 +25,33 @@ public class PagamentoControllerImpl implements PagamentoController {
     @Override
     @PutMapping(path = "/webhook")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(tags = "Área administrativa - Pagamentos", summary = "Webhook", description = "Webhook para confirmação utilizado pelo gateway de pagamento")
-    public void confirmacaoPagamento(
+    @Operation(tags = "Pagamentos", summary = "Webhook", description = "Webhook para confirmação utilizado pelo gateway de pagamento. Utilizar as opções 'CONFIRMADO' ou 'RECUSADO'")
+    public PagamentoConfirmadoDTO confirmacaoPagamento(
             @RequestBody ConfirmacaoPagamentoDTO confirmacaoPagamentoDTO
     ) {
         pagamentoUserCase.confirmacaoPagamento(confirmacaoPagamentoDTO.toConfirmacaoPagamento());
+        return new PagamentoConfirmadoDTO(confirmacaoPagamentoDTO.getStatusDoPagamento());
     }
 
     @Override
-    @GetMapping(path = "/{id}")
-    @Operation(tags = "Área administrativa - Pagamentos", summary = "Consultar status do pagamento", description = "Consulta status do pagamento para os pedidos realizados")
-    public PagamentoDTO consultarStatusDoPagamento(@Parameter(name = "id", description = "Número do pedido") @PathVariable("id") Long numeroDoPedido) {
+    @GetMapping(path = "/{numero-do-pedido}")
+    @Operation(tags = "Pagamentos", summary = "Consultar status do pagamento", description = "Consulta status do pagamento para os pedidos realizados")
+    public PagamentoDTO consultarStatusDoPagamento(@Parameter(name = "numero-do-pedido", description = "Número do pedido") @PathVariable("numero-do-pedido") Long numeroDoPedido) {
         Pagamento pagamento = pagamentoUserCase.buscarPagamentoPorNumeroDoPedido(numeroDoPedido);
         return pagamentoPresenter.toPagamentoDTO(pagamento);
     }
 
     @Override
-    @GetMapping(path = "/{id}/comprovante")
+    @GetMapping(path = "/{numero-do-pedido}/comprovante")
     @ResponseStatus(HttpStatus.OK)
-    @Operation(tags = "Área administrativa - Pagamentos", summary = "Comprovante", description = "Comprovante da confirmação de pagamento do pedido")
-    public ComprovanteDTO buscarComprovante(@Parameter(description = "Número do pedido", name = "id") @PathVariable("id") Long numeroDoPedido) {
+    @Operation(tags = "Pagamentos", summary = "Comprovante", description = "Comprovante da confirmação de pagamento do pedido")
+    public ComprovanteDTO buscarComprovante(@Parameter(description = "Número do pedido", name = "numero-do-pedido") @PathVariable("numero-do-pedido") Long numeroDoPedido) {
         return pagamentoPresenter.toComprovanteDTO(pagamentoUserCase.buscarComprovante(numeroDoPedido));
     }
 
     @Override
     @PostMapping
-    @Operation(tags = "Área administrativa - Pagamentos", summary = "Pagamento do pedido", description = "Realiza o pagamento do pedido para que o pedido possa ser encaminhado para o preparo. Caso o pagamento não seja concluído o pedido não poderá avançar para as próximas etapas.")
+    @Operation(tags = "Pagamentos", summary = "Pagamento do pedido", description = "Realiza o pagamento do pedido para que o pedido possa ser encaminhado para o preparo. Caso o pagamento não seja concluído o pedido não poderá avançar para as próximas etapas.")
     public ComprovanteDTO pagamento(
             @RequestBody PagamentoPedidoDTO pagamentoPedidoDTO
             ){

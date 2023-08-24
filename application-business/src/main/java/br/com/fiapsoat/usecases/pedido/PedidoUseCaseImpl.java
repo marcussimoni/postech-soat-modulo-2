@@ -63,11 +63,11 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
     @Override
     public List<Pedido> listar(StatusDoPagamento statusDoPagamento) {
 
-        if(statusDoPagamento == null) {
-            return pedidoService.buscarTodosOsPedidosDisponiveis();
-        } else {
+//        if(statusDoPagamento == null) {
+//            return pedidoService.buscarTodosOsPedidosDisponiveis();
+//        } else {
             return pedidoService.buscarPedidosDisponiveis(statusDoPagamento);
-        }
+//        }
 
     }
 

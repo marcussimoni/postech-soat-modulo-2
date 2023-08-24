@@ -16,12 +16,12 @@ spec:
       - name: postgres
         image: postgres:15.3
         resources:
-          limits:
-            memory: "512Mi"
-            cpu: "1000m"
           requests:
             memory: "256Mi"
             cpu: "500m"
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
         ports:
         - containerPort: 5432
         env:

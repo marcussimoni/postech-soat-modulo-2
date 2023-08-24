@@ -1,6 +1,7 @@
 package br.com.fiapsoat.db.pedido;
 
 import br.com.fiapsoat.db.produto.TbProduto;
+import br.com.fiapsoat.entities.enums.EtapaDoPedido;
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.exceptions.BusinessException;
 import br.com.fiapsoat.entities.pedido.Pedido;
@@ -13,7 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import static br.com.fiapsoat.entities.enums.EtapaDoPedido.*;
 
 @Repository
 @AllArgsConstructor
@@ -23,7 +28,9 @@ public class PedidoGatewayImpl implements PedidoGateway {
 
     @Override
     public List<Pedido> buscarPedidosDisponiveis(StatusDoPagamento statusDoPagamento) {
-        return repository.buscarPedidosDisponiveis(statusDoPagamento).stream().map(this::pedidoBuilder).toList();
+        return List.of(PRONTO, EM_PREPARACAO, RECEBIDO).stream().map(etapaDoPedido -> {
+            return repository.buscarPedidosDisponiveis(statusDoPagamento, etapaDoPedido).stream().map(this::pedidoBuilder).toList();
+        }).flatMap(Collection::stream).toList();
     }
 
     @Override
@@ -65,8 +72,11 @@ public class PedidoGatewayImpl implements PedidoGateway {
     }
 
     private interface SpringRepository extends JpaRepository<TbPedido, Long> {
-        @Query("SELECT p FROM TbPedido p WHERE p.pedidoRetirado IS NULL AND p.statusDoPagamento = :statusDoPagamento ORDER BY p.pedidoRealizadoEm ASC")
-        List<TbPedido> buscarPedidosDisponiveis(@Param("statusDoPagamento") StatusDoPagamento statusDoPagamento);
+        @Query("SELECT p FROM TbPedido p WHERE p.pedidoRetirado IS NULL " +
+                "AND (p.statusDoPagamento = :statusDoPagamento OR :statusDoPagamento IS NULL)" +
+                "AND p.etapa = :etapa " +
+                "ORDER BY p.pedidoRealizadoEm ASC")
+        List<TbPedido> buscarPedidosDisponiveis(@Param("statusDoPagamento") StatusDoPagamento statusDoPagamento, @Param("etapa") EtapaDoPedido etapa);
     }
 
 }

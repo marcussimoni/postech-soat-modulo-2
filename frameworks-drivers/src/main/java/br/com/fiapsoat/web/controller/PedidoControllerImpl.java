@@ -22,20 +22,24 @@ public class PedidoControllerImpl {
     private final PedidoPresenter pedidoPresenter;
 
     @GetMapping
-    @Operation(tags = "Pedidos", summary = "Lista todos os pedidos disponíveis.", description = "Lista todos os pedidos nas etapas pago, recebido, em preparação ou pronto. Para produtos finalizados utilizar a busca por número do pedido.")
+    @Operation(
+            tags = "Pedidos",
+            summary = "Lista todos os pedidos disponíveis.",
+            description = "Lista todos os pedidos que foram pagos e se encontram nas etapas recebido, em preparação ou pronto. Para produtos finalizados utilizar a busca por número do pedido."
+    )
     public List<PedidoDTO> listar(@RequestParam(value = "status", required = false) StatusDoPagamento statusDoPagamento){
         return pedidoUseCase.listar(statusDoPagamento).stream().map(pedidoPresenter::pedidoDTOBuilder).toList();
     }
 
-    @PutMapping(path = "/proxima-etapa/{numeroDoPedido}")
+    @PutMapping(path = "/proxima-etapa/{numero-do-pedido}")
     @Operation(tags = "Pedidos", summary = "Atualiza etapa do pedido para próxima etapa disponível", description = "As etapas são atualizadas somente após o pagamento confirmado. As etapas são atualizadas seguindo a ordem: RECEBIDO para EM PREPARACAO para PRONTO e FINALIZADO")
-    public PedidoDTO atualizaParaEmPreparacao(@PathVariable("numeroDoPedido") Long numeroDoPedido){
+    public PedidoDTO atualizaParaEmPreparacao(@Parameter(name = "numero-do-pedido", description = "Número do pedido") @PathVariable("numero-do-pedido") Long numeroDoPedido){
         return pedidoPresenter.pedidoDTOBuilder(pedidoUseCase.atualizaParaAProximaEtapaDoPedido(numeroDoPedido));
     }
 
     @GetMapping(path = "/buscar-por-numero")
-    @Operation(tags = "Pedidos", summary = "Buscar pedido por número do pedido", description = "Consulta o pedido pelo número do pedido")
-    public PedidoDTO buscarPedidoPorId(@Parameter(name = "id", description = "Número do pedido") @RequestParam(name = "id") Long id){
+    @Operation(tags = "Pedidos", summary = "Buscar pedido por número do pedido", description = "Consulta o pedido pelo número do pedido em qualquer etapa de preparo e status de pagamento.")
+    public PedidoDTO buscarPedidoPorId(@Parameter(name = "numero-do-pedido", description = "Número do pedido") @RequestParam(name = "numero-do-pedido") Long id){
         return pedidoPresenter.pedidoDTOBuilder(pedidoUseCase.buscarPedidoPorId(id));
     }
 

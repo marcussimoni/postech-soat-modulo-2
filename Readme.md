@@ -11,11 +11,11 @@ A api backend esta organizada em modulos representando as respectivas camadas do
 - application-business -> Applications Business Rules
 - enterprise-business -> Enterprise Business Rules
 
-### Dockerfile
+## Dockerfile
 
 Comando do ***Docker*** para construir a imagem da aplicação: `docker build -t postech-soat-modulo-2 .`
 
-### Kubernetes
+## Kubernetes
 
 No diretório ***kubernetes*** encontram-se todos os arquivos necessários para iniciar a api backend junto com o banco de dados postgres. Junto dos arquivos de configuração 
 foi disponibilizado também o arquivo ***k8s-config.sh*** que auxilia a implantação/exclusão do objetos kubernetes.
@@ -35,15 +35,25 @@ O processo para realizar um pedido através dos endpoints da api deve seguir os 
    2. Cadastrar o novo cliente no endpoint: ***[atendimento/cliente/cadastrar](http://localhost:8080/swagger-ui/index.html#/Totem%20de%20auto%20atendimento/cadastrarNovoCliente)***
 2. A segunda etapa consiste em apresentar os produtos disponíveis para compor o pedido. Os pedidos podem ser acessados em: ***[atendimento/produtos](http://localhost:8080/swagger-ui/index.html#/Totem%20de%20auto%20atendimento/buscarProdutosPorCategoria)***
 3. Após os produtos escolhidos o checkout do pedido pode ser concluido pelo endpoint ***[atendimento/pedido/checkout](http://localhost:8080/swagger-ui/index.html#/Totem%20de%20auto%20atendimento/checkout)***. O cliente é opcional durante o checkout, se o cliente desejar se identificar é necessário incluir o cpf do cliente no payload do pedido.
-4. Com o checkout realizado o pedido só fica disponível para preparo após o pagamento do pedido. O pagamento pode ser realizado pelo endpoint: ***[atendimento/pedido/pagamento](http://localhost:8080/swagger-ui/index.html#/Totem%20de%20auto%20atendimento/pagamento)***
+4. Com o checkout realizado o pedido só fica disponível para preparo após o pagamento do pedido.
+
+### Etapas para realizar o pagamento do pedido
+
+1. O pagamento pode ser realizado pelo endpoint: ***[pagamento](http://localhost:8080/swagger-ui/index.html#/Pagamentos/pagamento)*** informando o número retornado ao concluir o pedido
+2. Após realizar o pagamento é necessário ainda a confirmação pela instituição financeira. Essa etapa pode ser realizada pelo 
+endpoint ***[pagamento/webhook](http://localhost:8080/swagger-ui/index.html#/Pagamentos/confirmacaoPagamento)*** 
+também informando o número do pedido e as opções de status CONFIRMADO ou RECUSADO.
+3. O status do pagamento pode ser consultado em: ***[pagamento/{numero-do-pedido}](http://localhost:8080/swagger-ui/index.html#/Pagamentos/consultarStatusDoPagamento)***
 
 ### Atualizar as etapas do pedido e acompanhamento das etapas pelo cliente e atendimento
 
 Após o pedido ser realizado e pago pelo cliente a cozinha pode iniciar o preparo.
 
 1. O acompanhamento do status do pedido pode ser feito por dois endpoins:
-   1. Pelo número do pedido ***[pedido/buscar-por-numero](http://localhost:8080/swagger-ui/index.html#/Pedidos/buscarPedidoPorId)***. Pode ser utilizado pelo atendente para para verificar pedidos em qualquer etapa e que foram ou não pagos.
-   2. Todos os pedidos pagos e aguardando a conclusão do preparo ***[pedido](http://localhost:8080/swagger-ui/index.html#/Pedidos/listar_1)***. Nesse endpoint só serão listados os pedidos com status de pagamento igual a Pago  para que o cliente possa acompanhar em qual etapa o seu pedido se encontra.
+   1. Pelo número do pedido ***[pedido/buscar-por-numero](http://localhost:8080/swagger-ui/index.html#/Pedidos/buscarPedidoPorId)***. Pode ser utilizado pelo atendente para para verificar pedidos em qualquer etapa e que foram ou não pagos e também os pedidos finalizados.
+   2. Todos os pedidos pagos e aguardando a conclusão do preparo ficam disponíveis no endpoint: ***[pedido](http://localhost:8080/swagger-ui/index.html#/Pedidos/listar_1)***. Nesse endpoint só serão listados os pedidos com status de pagamento igual a Pago para que o cliente possa acompanhar em qual etapa o seu pedido se encontra.
+   Os pedidos serão apresentados ordenados por data de recebimento e seguindo a prioridade: Pronto > Em preparação > Recebidos. 
+   Os pedidos finalizados não são apresentados nessa consulta. Eles devem ser consultados na busca por numero do pedido: ***[pedido/buscar-por-numero](http://localhost:8080/swagger-ui/index.html#/Pedidos/buscarPedidoPorId)***
 2. A equipe responsável pelo preparo dos pedidos pode atualizar as etapas a partir do endpoint: ***[pedido/proxima-etapa/{pedido}](http://localhost:8080/swagger-ui/index.html#/Pedidos/atualizaParaEmPreparacao)***
 
 ### Áreas administrativas
