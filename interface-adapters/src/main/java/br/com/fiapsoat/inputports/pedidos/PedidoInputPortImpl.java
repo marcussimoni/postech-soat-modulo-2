@@ -1,9 +1,9 @@
-package br.com.fiapsoat.services.pedidos;
+package br.com.fiapsoat.inputports.pedidos;
 
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.pedido.Pedido;
 import br.com.fiapsoat.gateways.pedido.PedidoGateway;
-import br.com.fiapsoat.services.pedido.PedidoService;
+import br.com.fiapsoat.usecases.inputports.pedido.PedidoInputPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class PedidoServiceImpl implements PedidoService {
+public class PedidoInputPortImpl implements PedidoInputPort {
 
     private final PedidoGateway pedidoGateway;
 

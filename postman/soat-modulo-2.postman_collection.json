@@ -1,0 +1,943 @@
+{
+	"info": {
+		"_postman_id": "c14e30ea-dd7d-4db1-b2c4-cfa1c9a9b4ed",
+		"name": "soat-modulo-2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "cliente",
+			"item": [
+				{
+					"name": "salvar cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    let response = pm.response.json()",
+									"    pm.collectionVariables.set(\"cpf\", response.cpf)",
+									"});",
+									"",
+									"pm.test(\"cliente salvo com sucesso\", function () {",
+									"    let response = pm.response.json()",
+									"    ",
+									"    pm.expect(response.cpf).to.equals(pm.collectionVariables.get(\"cpf\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var cpf = \"\"",
+									"while(cpf.length < 11){",
+									"    cpf += Math.floor(Math.random() * 10)",
+									"}",
+									"",
+									"pm.collectionVariables.set(\"randomCpf\", cpf)",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 1,\n  \"nome\": \"maria\",\n  \"email\": \"maria@email.com\",\n  \"cpf\": \"{{randomCpf}}\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/cliente",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar clientes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Lista de clientes preenchida\", function () {",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.length).to.gt(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/cliente",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"cliente"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "buscar por cpf",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"buscar por cpf\", function () {",
+									"    let response = pm.response.json()",
+									"    ",
+									"    pm.expect(response.cpf).to.equals(pm.collectionVariables.get(\"cpf\"));",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "cpf",
+								"value": "{{cpf}}",
+								"type": "default"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/atendimento/cliente/buscar",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"atendimento",
+								"cliente",
+								"buscar"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "produtos",
+			"item": [
+				{
+					"name": "salvar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    let response = pm.response.json()",
+									"    pm.collectionVariables.set(\"produtoId\", response.id)",
+									"});",
+									"",
+									"pm.test(\"Salvar novo produto\", function () {",
+									"    let response = pm.response.json()",
+									"    ",
+									"    pm.expect(response.nome).to.equals(\"Sorvete\");",
+									"    pm.expect(response.preco).to.equals(10.0);",
+									"    pm.expect(response.categoria).to.equals(\"SOBREMESA\");",
+									"    pm.expect(response.descricao).to.equals(\"Sorvete de chocolate\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id\": 1,\n  \"nome\": \"Sorvete\",\n  \"preco\": 10,\n  \"descricao\": \"Sorvete de chocolate\",\n  \"categoria\": \"SOBREMESA\",\n  \"imagem\": \"http://imagem.com\"\n}"
+						},
+						"url": {
+							"raw": "{{host}}/produto",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"produto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar produtos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Lista de produtos preenchida\", function () {",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.length).to.gt(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/produto",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"produto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "atualizar produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Produto atualizado\", function () {",
+									"    let response = pm.response.json()",
+									"    ",
+									"    pm.expect(response.nome).to.equals(\"Sorvete atualizado\");",
+									"    pm.expect(response.preco).to.equals(10.0);",
+									"    pm.expect(response.categoria).to.equals(\"SOBREMESA\");",
+									"    pm.expect(response.descricao).to.equals(\"Sorvete de chocolate\");",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\n    \"id\": 8,\n    \"nome\": \"Sorvete atualizado\",\n    \"preco\": 10,\n    \"descricao\": \"Sorvete de chocolate\",\n    \"categoria\": \"SOBREMESA\",\n    \"imagem\": \"http://imagem.com\"\n  }"
+						},
+						"url": {
+							"raw": "{{host}}/produto/{{produtoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"produto",
+								"{{produtoId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "excluir produto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/produto/{{produtoId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"produto",
+								"{{produtoId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "totem autoatendimento",
+			"item": [
+				{
+					"name": "buscar cliente por cpf",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "cpf",
+								"value": "{{cpf}}"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/atendimento/cliente/buscar",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"atendimento",
+								"cliente",
+								"buscar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "checkout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"    let response = pm.response.json()",
+									"    pm.collectionVariables.set(\"numeroDoPedido\", response.numeroDoPedido)",
+									"});",
+									"",
+									"pm.test(\"Pedido realizado\", function () {",
+									"    let response = pm.response.json()",
+									"    ",
+									"    pm.expect(response.etapaDaPreparacao).to.equals(\"Recebido\");",
+									"    pm.expect(response.statusDoPagamento).to.equals(\"Aguardando pagamento\");",
+									"    pm.expect(response.items.length).to.equals(2);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cpf\": \"{{cpf}}\",\n  \"produtos\": [\n    {\n        \"id\": 2,\n        \"nome\": \"Batata\",\n        \"preco\": 5.9,\n        \"descricao\": \"Batata Pequena\",\n        \"categoria\": \"ACOMPANHAMENTO\",\n        \"imagem\": \"imagem da batata\"\n    },\n        {\n        \"id\": 6,\n        \"nome\": \"Refrigerante\",\n        \"preco\": 6.5,\n        \"descricao\": \"Refrigerante Média\",\n        \"categoria\": \"BEBIDA\",\n        \"imagem\": \"imagem da bebida\"\n    }\n  ]\n}"
+						},
+						"url": {
+							"raw": "{{host}}/atendimento/pedido/checkout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"atendimento",
+								"pedido",
+								"checkout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pedidos",
+			"item": [
+				{
+					"name": "listar pedidos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Lista de pedidos preenchida\", function () {",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.length).to.gt(0);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/pedido",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pedido"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "pagamento",
+			"item": [
+				{
+					"name": "efetuar pagamento",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pagamento realizado\", function () {",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.itensPedido.length).to.equals(2);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numeroDoPedido\": {{numeroDoPedido}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/pagamento",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pagamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "efetuar pagamento (erro 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"numeroDoPedido\": {{numeroDoPedido}}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/pagamento",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pagamento"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirmar pagamento (webhook)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pagamento confirmado\", function () {",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.mensagem).to.equals(\"Pagamento confirmado\");",
+									"});",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numeroDoPedido\": {{numeroDoPedido}},\n  \"statusDoPagamento\": \"CONFIRMADO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/pagamento/webhook",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pagamento",
+								"webhook"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "confirmar pagamento (webhook erro 400)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"    pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"numeroDoPedido\": {{numeroDoPedido}},\n  \"statusDoPagamento\": \"CONFIRMADO\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/pagamento/webhook",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pagamento",
+								"webhook"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "preparo",
+			"item": [
+				{
+					"name": "buscar pedido por numero do pedido",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pedido na etapaDaPreparacao === Recebido\", function(){",
+									"",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.etapaDaPreparacao).to.include(\"Recebido\");",
+									"    pm.expect(response.statusDoPagamento).to.include(\"Pagamento confirmado\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/pedido/buscar-por-numero?numero-do-pedido={{numeroDoPedido}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pedido",
+								"buscar-por-numero"
+							],
+							"query": [
+								{
+									"key": "numero-do-pedido",
+									"value": "{{numeroDoPedido}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "proxima etapa do pedido - em preparacao",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pedido na etapaDaPreparacao === Em preparação\", function(){",
+									"",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.etapaDaPreparacao).to.include(\"Em preparação\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/pedido/proxima-etapa/{{numeroDoPedido}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pedido",
+								"proxima-etapa",
+								"{{numeroDoPedido}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "proxima etapa do pedido - pronto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pedido na etapaDaPreparacao === Pronto\", function(){",
+									"",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.etapaDaPreparacao).to.include(\"Pronto\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/pedido/proxima-etapa/{{numeroDoPedido}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pedido",
+								"proxima-etapa",
+								"{{numeroDoPedido}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "proxima etapa do pedido - finalizado",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Pedido na etapaDaPreparacao === Finalizado\", function(){",
+									"",
+									"    let response = pm.response.json()",
+									"",
+									"    pm.expect(response.etapaDaPreparacao).to.include(\"Finalizado\");",
+									"",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/pedido/proxima-etapa/{{numeroDoPedido}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"pedido",
+								"proxima-etapa",
+								"{{numeroDoPedido}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cpf",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "produtoId",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "pedidoId",
+			"value": ""
+		},
+		{
+			"key": "randomCpf",
+			"value": ""
+		},
+		{
+			"key": "host",
+			"value": "http://localhost:8080",
+			"type": "default"
+		},
+		{
+			"key": "numeroDoPedido",
+			"value": ""
+		}
+	]
+}

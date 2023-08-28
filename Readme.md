@@ -11,6 +11,10 @@ A api backend esta organizada em modulos representando as respectivas camadas do
 - application-business -> Applications Business Rules
 - enterprise-business -> Enterprise Business Rules
 
+Devido a separação das camadas do Clean Architecture em módulos do maven foi necessário criar uma interface chamada ****InputPort*** responsável por acessar os componetes de ***UseCase***. 
+As interfaces de ****InputPort*** foram necessárias e funcionam como um meio para acessar os componentes ***Gateway***, atráves de interfaces, pelos componentes ***UseCases*** pois o módulo application-business
+não possui acesso ao módulo interface-adapters onde as interfaces de ***Gateway*** foram criadas.
+
 ## Kubernetes
 
 No diretório ***kubernetes*** encontram-se todos os arquivos necessários para iniciar a api backend junto com o banco de dados postgres.

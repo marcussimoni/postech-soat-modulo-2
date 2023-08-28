@@ -1,11 +1,11 @@
-package br.com.fiapsoat.services.produto;
+package br.com.fiapsoat.usecases.inputports.produto;
 
 import br.com.fiapsoat.entities.enums.Categoria;
 import br.com.fiapsoat.entities.produto.Produto;
 
 import java.util.List;
 
-public interface ProdutoService {
+public interface ProdutoInputPort {
     List<Produto> findByCategoria(Categoria categoria);
 
     Produto save(Produto produto);

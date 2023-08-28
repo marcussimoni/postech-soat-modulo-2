@@ -1,9 +1,9 @@
-package br.com.fiapsoat.services.produtos;
+package br.com.fiapsoat.inputports.produtos;
 
 import br.com.fiapsoat.entities.enums.Categoria;
 import br.com.fiapsoat.entities.produto.Produto;
 import br.com.fiapsoat.gateways.produto.ProdutoGateway;
-import br.com.fiapsoat.services.produto.ProdutoService;
+import br.com.fiapsoat.usecases.inputports.produto.ProdutoInputPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ProdutoServiceImpl implements ProdutoService {
+public class ProdutoInputPortImpl implements ProdutoInputPort {
 
     private final ProdutoGateway produtoGateway;
 

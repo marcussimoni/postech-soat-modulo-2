@@ -6,7 +6,7 @@ import br.com.fiapsoat.entities.exceptions.BusinessException;
 import br.com.fiapsoat.entities.pedido.Pedido;
 import br.com.fiapsoat.entities.produto.Produto;
 import br.com.fiapsoat.entities.valueobjects.cpf.Cpf;
-import br.com.fiapsoat.services.pedido.PedidoService;
+import br.com.fiapsoat.usecases.inputports.pedido.PedidoInputPort;
 import br.com.fiapsoat.usecases.cliente.ClienteUseCase;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -24,13 +24,13 @@ import static br.com.fiapsoat.entities.enums.StatusDoPagamento.AGUARDANDO_PAGAME
 @AllArgsConstructor
 public class PedidoUseCaseImpl implements PedidoUseCase {
 
-    private final PedidoService pedidoService;
+    private final PedidoInputPort pedidoInputPort;
     private final ClienteUseCase clienteUseCase;
 
     @Override
     public Pedido buscarPedidoPorId(Long id) {
 
-        return pedidoService.findById(id);
+        return pedidoInputPort.findById(id);
 
     }
 
@@ -47,16 +47,16 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
             throw new BusinessException("Nenhum produto selecionado", List.of("Ao menos um produto deve ser adicionado a lista de produtos para prosseguir com o checkout do pedido"), HttpStatus.BAD_REQUEST);
         }
 
-        return pedidoService.save(new Pedido(cliente, produtos));
+        return pedidoInputPort.save(new Pedido(cliente, produtos));
 
     }
 
     @Override
     @Transactional
     public void atualizarStatusPagamentoDoPedido(Long id, StatusDoPagamento status) {
-        Pedido pedido = pedidoService.findById(id);
+        Pedido pedido = pedidoInputPort.findById(id);
         pedido.setStatusDoPagamento(status);
-        pedidoService.save(pedido);
+        pedidoInputPort.save(pedido);
     }
 
 
@@ -66,7 +66,7 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
 //        if(statusDoPagamento == null) {
 //            return pedidoService.buscarTodosOsPedidosDisponiveis();
 //        } else {
-            return pedidoService.buscarPedidosDisponiveis(statusDoPagamento);
+            return pedidoInputPort.buscarPedidosDisponiveis(statusDoPagamento);
 //        }
 
     }
@@ -74,7 +74,7 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
     @Transactional
     public Pedido atualizaParaAProximaEtapaDoPedido(Long pedido) {
 
-        Pedido entity = pedidoService.findById(pedido);
+        Pedido entity = pedidoInputPort.findById(pedido);
 
         if(entity.getStatusDoPagamento() == AGUARDANDO_PAGAMENTO){
             String mensagem = "Não foi possível atualizar a etapa do pedido";
@@ -84,7 +84,7 @@ public class PedidoUseCaseImpl implements PedidoUseCase {
 
         entity.setEtapa(entity.getEtapa().proximaEtapa());
 
-        return pedidoService.save(entity);
+        return pedidoInputPort.save(entity);
 
     }
 

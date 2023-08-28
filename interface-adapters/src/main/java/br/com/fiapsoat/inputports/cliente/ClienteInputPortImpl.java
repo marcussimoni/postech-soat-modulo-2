@@ -1,8 +1,9 @@
-package br.com.fiapsoat.services.cliente;
+package br.com.fiapsoat.inputports.cliente;
 
 import br.com.fiapsoat.entities.cliente.Cliente;
 import br.com.fiapsoat.entities.valueobjects.cpf.Cpf;
 import br.com.fiapsoat.gateways.cliente.ClienteGateway;
+import br.com.fiapsoat.usecases.inputports.cliente.ClienteInputPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +11,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ClienteServiceImpl implements ClienteService{
+public class ClienteInputPortImpl implements ClienteInputPort {
 
     private final ClienteGateway clienteGateway;
 

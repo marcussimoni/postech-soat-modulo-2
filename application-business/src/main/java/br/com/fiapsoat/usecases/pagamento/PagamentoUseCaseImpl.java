@@ -7,7 +7,7 @@ import br.com.fiapsoat.entities.pagamento.Pagamento;
 import br.com.fiapsoat.entities.pagamento.PagamentoPedido;
 import br.com.fiapsoat.entities.produto.Produto;
 import br.com.fiapsoat.entities.recibo.Comprovante;
-import br.com.fiapsoat.services.pagamento.PagamentoService;
+import br.com.fiapsoat.usecases.inputports.pagamento.PagamentoInputPort;
 import br.com.fiapsoat.usecases.pedido.PedidoUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,14 +25,14 @@ import static br.com.fiapsoat.entities.enums.StatusDoPagamento.AGUARDANDO_CONFIR
 public class PagamentoUseCaseImpl implements PagamentoUseCase {
 
     private PedidoUseCase pedidoUseCase;
-    private PagamentoService pagamentoService;
+    private PagamentoInputPort pagamentoInputPort;
 
     @Override
     public Comprovante pagamento(PagamentoPedido pagamentoPedido) {
 
         Pagamento pagamento = new Pagamento(pedidoUseCase.buscarPedidoPorId(pagamentoPedido.getNumeroDoPedido()));
 
-        Pagamento pagamentoRegistrado = pagamentoService.registrarPagamento(pagamento);
+        Pagamento pagamentoRegistrado = pagamentoInputPort.registrarPagamento(pagamento);
 
         pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamentoPedido.getNumeroDoPedido(), AGUARDANDO_CONFIRMACAO);
 
@@ -52,14 +52,14 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
             throw new BusinessException(message, List.of(), HttpStatus.BAD_REQUEST);
         }
 
-        Pagamento pagamento = pagamentoService.buscarPagamentoPorNumeroDoPedido(confirmacaoPagamento.getNumeroDoPedido());
+        Pagamento pagamento = pagamentoInputPort.buscarPagamentoPorNumeroDoPedido(confirmacaoPagamento.getNumeroDoPedido());
 
         if(statusDePagamentoValido.contains(pagamento.getStatus())){
             String message = MessageFormat.format("Pagamento já realizado para o pedido {0}. Status do pagamento: {1} [{2}]", confirmacaoPagamento.getNumeroDoPedido(), pagamento.getStatus().getStatus(), pagamento.getStatus());
             throw new BusinessException(message, List.of(), HttpStatus.BAD_REQUEST);
         }
 
-        pagamentoService.atualizarStatusPagamento(pagamento, statusDoPagamento);
+        pagamentoInputPort.atualizarStatusPagamento(pagamento, statusDoPagamento);
 
         pedidoUseCase.atualizarStatusPagamentoDoPedido(pagamento.getPedido().getId(), statusDoPagamento);
 
@@ -67,12 +67,12 @@ public class PagamentoUseCaseImpl implements PagamentoUseCase {
 
     @Override
     public Comprovante buscarComprovante(Long numeroDoPedido) {
-        return comprovanteBuilder(pagamentoService.buscarPagamentoPorNumeroDoPedido(numeroDoPedido));
+        return comprovanteBuilder(pagamentoInputPort.buscarPagamentoPorNumeroDoPedido(numeroDoPedido));
     }
 
     @Override
     public Pagamento buscarPagamentoPorNumeroDoPedido(Long numeroDoPedido) {
-        return pagamentoService.buscarPagamentoPorNumeroDoPedido(numeroDoPedido);
+        return pagamentoInputPort.buscarPagamentoPorNumeroDoPedido(numeroDoPedido);
     }
 
     private String calcularValorTotalDoPedido(Pagamento pagamentoRegistrado) {

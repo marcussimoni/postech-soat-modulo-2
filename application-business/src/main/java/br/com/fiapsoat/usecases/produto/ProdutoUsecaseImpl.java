@@ -2,7 +2,7 @@ package br.com.fiapsoat.usecases.produto;
 
 import br.com.fiapsoat.entities.enums.Categoria;
 import br.com.fiapsoat.entities.produto.Produto;
-import br.com.fiapsoat.services.produto.ProdutoService;
+import br.com.fiapsoat.usecases.inputports.produto.ProdutoInputPort;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,18 +13,18 @@ import java.util.List;
 @AllArgsConstructor
 public class ProdutoUsecaseImpl implements ProdutoUseCase {
 
-    private final ProdutoService produtoService;
+    private final ProdutoInputPort produtoInputPort;
 
     @Override
     public List<Produto> listar(Categoria categoria) {
-        return produtoService.findByCategoria(categoria);
+        return produtoInputPort.findByCategoria(categoria);
     }
 
     @Override
     @Transactional
     public Produto salvar(Produto produto) {
 
-        return produtoService.save(produto);
+        return produtoInputPort.save(produto);
 
     }
 
@@ -34,17 +34,17 @@ public class ProdutoUsecaseImpl implements ProdutoUseCase {
 
         findById(produto.getId());
 
-        return produtoService.save(produto);
+        return produtoInputPort.save(produto);
 
     }
 
     @Override
     public void excluir(Long id) {
         Produto produto = findById(id);
-        produtoService.delete(produto);
+        produtoInputPort.delete(produto);
     }
 
     private Produto findById(Long id) {
-        return produtoService.findById(id);
+        return produtoInputPort.findById(id);
     }
 }

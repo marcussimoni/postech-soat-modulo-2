@@ -1,14 +1,15 @@
-package br.com.fiapsoat.services.pagamento;
+package br.com.fiapsoat.inputports.pagamento;
 
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
 import br.com.fiapsoat.gateways.pagamento.PagamentoGateway;
+import br.com.fiapsoat.usecases.inputports.pagamento.PagamentoInputPort;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
-public class PagamentoServiceImpl implements PagamentoService {
+public class PagamentoInputPortImpl implements PagamentoInputPort {
 
     private final PagamentoGateway pagamentoGateway;
 

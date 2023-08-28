@@ -1,9 +1,9 @@
-package br.com.fiapsoat.services.pagamento;
+package br.com.fiapsoat.usecases.inputports.pagamento;
 
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.pagamento.Pagamento;
 
-public interface PagamentoService {
+public interface PagamentoInputPort {
     Pagamento registrarPagamento(Pagamento pagamento);
 
     Pagamento buscarPagamentoPorId(Long idPagamento);

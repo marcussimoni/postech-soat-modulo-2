@@ -1,11 +1,11 @@
-package br.com.fiapsoat.services.pedido;
+package br.com.fiapsoat.usecases.inputports.pedido;
 
 import br.com.fiapsoat.entities.enums.StatusDoPagamento;
 import br.com.fiapsoat.entities.pedido.Pedido;
 
 import java.util.List;
 
-public interface PedidoService {
+public interface PedidoInputPort {
     Pedido findById(Long id);
 
     Pedido save(Pedido pedido);
