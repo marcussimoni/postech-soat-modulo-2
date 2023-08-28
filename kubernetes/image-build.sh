@@ -15,4 +15,6 @@ else
   echo "removendo a imagem após push para o docker hub"
 
   docker rmi -f $(docker images --filter "reference=$dockerhub_user/$image_name" -q)
+
+  docker images $dockerhub_user/$image_name
 fi

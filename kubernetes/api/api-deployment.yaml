@@ -51,6 +51,11 @@ spec:
             secretKeyRef:
               name: api-secrets
               key: SPRING_PROFILES_ACTIVE
+        - name: SHOW_SQL
+          valueFrom:
+            secretKeyRef:
+              name: api-secrets
+              key: SHOW_SQL
         - name: POSTGRES_CONNECTION_URL
           valueFrom:
             secretKeyRef:
